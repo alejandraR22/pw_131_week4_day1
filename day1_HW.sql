@@ -22,9 +22,10 @@ WHERE amount BETWEEN 3.99 AND 5.99
 
 -- What film does the store have the most of? (search in inventory)
 -- ????????
-SELECT film_id,inventory
+SELECT film_id,title, COUNT(*)
 FROM inventory
-WHERE amount
+GROUP BY film_id
+ORDER BY Count(*) DESC
 
 -- How many customers have the last name ‘William’?
 --0
@@ -33,39 +34,45 @@ FROM customer
 WHERE  last_name = 'William'
 
 -- What store employee (get the id) sold the most rentals?
---???????
-SELECT staff_id,first_name,last_name
+-- 1
+SELECT staff_id, COUNT(*)
 FROM rental
-WHERE
+GROUP BY staff_id
+ORDER BY COUNT(*) DESC
 
 -- How many different district names are there?
---
-SELECT
+-- 603
+SELECT district
 FROM address
-WHERE
 
 -- What film has the most actors in it? (use film_actor table and get film_id)
 --
-SELECT
+SELECT film_id,count(actor_id)
 FROM film_actor
-WHERE
+GROUP BY film_id
+ORDER BY film_id DESC
 
 -- From store_id 1, how many customers have a last name ending with ‘es’? (use customer table)
---
-SELECT
+-- 13
+SELECT count(customer_id)
 FROM customer
-WHERE
+WHERE store_id = 1 AND last_name LIKE '%es'
 
 --How many payment amounts (4.99, 5.99, etc.) had a number of rentals above 250 for customers
 --with ids between 380 and 430? (use group by and having > 250)
---
-SELECT
+--3
+SELECT amount, COUNT(rental_id)
 FROM payment
-WHERE
+WHERE payment.customer_id BETWEEN 380 AND 430
+GROUP BY amount
+HAVING COUNT(*) > 250
+
 
 --Within the film table, how many rating categories are there? And what rating has the most
 --movies total?
---
-SELECT film_id
-FROM rating
-WHERE 
+- 5
+-PG-13
+SELECT rating, COUNT(title)
+FROM film
+GROUP BY rating
+ORDER BY COUNT(title) DESC
